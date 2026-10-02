@@ -1,0 +1,13 @@
+// Supply-chain lineage (Soufflé-style Datalog), evaluated at S8.
+// Same semantics as src/reasoning/datalog_engine.py (semi-naive fixpoint).
+
+.decl depends_on(service: symbol, sub: symbol)
+.decl hosted_in(node: symbol, jurisdiction: symbol)
+.decl untrusted(jurisdiction: symbol)
+.decl tainted(node: symbol)
+.output tainted
+
+untrusted("RU"). untrusted("CN"). untrusted("IR"). untrusted("KP"). untrusted("UNTRUSTED_OFFSHORE").
+
+tainted(X) :- hosted_in(X, J), untrusted(J).
+tainted(X) :- depends_on(X, Y), tainted(Y).

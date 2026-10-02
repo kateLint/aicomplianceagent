@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Compliance Workflow — מצגת פרויקט גמר</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #080d17; --surface: #111827; --surface-2: #182233;
+            --text: #f8fafc; --muted: #a6b0c0; --cyan: #22d3ee;
+            --blue: #3b82f6; --green: #34d399; --red: #fb7185;
+            --amber: #fbbf24; --line: rgba(255,255,255,.12);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            min-height: 100vh; overflow: hidden; display: flex; flex-direction: column;
+            background: var(--bg); color: var(--text); font-family: "Heebo", sans-serif;
+        }
+        header, footer {
+            min-height: 64px; padding: 0 2rem; display: flex; align-items: center;
+            justify-content: space-between; background: rgba(17,24,39,.92); border-color: var(--line);
+        }
+        header { border-bottom: 1px solid var(--line); }
+        footer { border-top: 1px solid var(--line); }
+        .return, button {
+            border: 1px solid var(--line); border-radius: 8px; background: rgba(255,255,255,.06);
+            color: var(--text); padding: .55rem 1rem; font: inherit; font-weight: 600;
+            text-decoration: none; cursor: pointer;
+        }
+        button:hover, .return:hover { background: rgba(255,255,255,.12); }
+        button:disabled { opacity: .35; cursor: default; }
+        .counter { color: var(--muted); font-family: "JetBrains Mono", monospace; direction: ltr; }
+        main { flex: 1; min-height: 0; display: grid; place-items: center; padding: 1.5rem; }
+        .slide {
+            display: none; width: min(1120px, 100%); height: min(610px, calc(100vh - 176px));
+            min-height: 0; overflow: auto; padding: 2.7rem 3rem;
+            border: 1px solid var(--line); border-radius: 18px; background: var(--surface);
+            box-shadow: 0 24px 60px rgba(0,0,0,.42);
+        }
+        .slide.active { display: flex; flex-direction: column; }
+        .slide-number { color: var(--cyan); font-size: .9rem; font-weight: 700; }
+        h1 { margin-top: 5.5rem; font-size: 3.35rem; line-height: 1.1; max-width: 850px; }
+        h2 { font-size: 2.15rem; line-height: 1.2; padding-bottom: 1rem; border-bottom: 2px solid var(--line); }
+        h3 { color: var(--cyan); font-size: 1.25rem; margin-bottom: .5rem; }
+        .subtitle { margin-top: 1.3rem; font-size: 1.35rem; color: var(--muted); max-width: 850px; }
+        .body { flex: 1; padding-top: 1.6rem; font-size: 1.16rem; line-height: 1.55; }
+        ul { padding-right: 1.5rem; }
+        li { margin-bottom: .7rem; }
+        strong { color: #fff; }
+        code { font-family: "JetBrains Mono", monospace; color: #8be9fd; }
+        .statement {
+            margin-top: 2rem; padding: 1.25rem 1.4rem; border-right: 5px solid var(--cyan);
+            background: rgba(34,211,238,.07); font-size: 1.25rem;
+        }
+        .columns { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .panel { padding: 1.3rem 1.4rem; border-top: 3px solid var(--blue); background: var(--surface-2); }
+        .panel.warn { border-color: var(--amber); }
+        .panel.bad { border-color: var(--red); }
+        .panel.good { border-color: var(--green); }
+        .layers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.6rem; margin-top: 1.1rem; }
+        .layer { padding: 1.4rem; background: var(--surface-2); border-top: 4px solid var(--cyan); min-height: 230px; }
+        .layer:nth-child(2) { border-color: var(--blue); }
+        .layer:nth-child(3) { border-color: var(--green); }
+        .layer .num { font: 700 2rem "JetBrains Mono", monospace; color: var(--muted); }
+        .flow { margin: 1.4rem 0; direction: ltr; display: flex; align-items: center; justify-content: center; gap: .7rem; flex-wrap: wrap; }
+        .flow span { padding: .75rem 1rem; border: 1px solid var(--line); background: var(--surface-2); border-radius: 7px; }
+        .flow b { color: var(--cyan); font-size: 1.4rem; }
+        table { width: 100%; border-collapse: collapse; font-size: 1rem; }
+        th, td { padding: .65rem .7rem; text-align: right; border-bottom: 1px solid var(--line); vertical-align: top; }
+        th { color: var(--cyan); }
+        .status-ok { color: var(--green); font-weight: 700; }
+        .status-no { color: var(--red); font-weight: 700; }
+        .status-wait { color: var(--amber); font-weight: 700; }
+        .fine { color: var(--muted); font-size: .95rem; }
+        @media (max-width: 850px) {
+            .slide { padding: 1.5rem; }
+            .columns, .layers { grid-template-columns: 1fr; }
+            h1 { margin-top: 2rem; font-size: 2.3rem; }
+            h2 { font-size: 1.65rem; }
+            .body { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a class="return" href="/">חזרה לפורטל</a>
+        <span class="counter" id="counter">1 / 9</span>
+    </header>
+    <main>
+        <section class="slide active">
+            <span class="slide-number">פרויקט גמר בארכיטקטורת מערכות AI</span>
+            <h1>AI Compliance &amp; Policy Workflow</h1>
+            <p class="subtitle">בדיקה מבוקרת של בקשות ארגוניות לשימוש בכלי AI ושירותי SaaS</p>
+            <div class="statement">המודל מחלץ עובדות. מדיניות מפורשת מחליטה. אי־ודאות עוברת לאדם.</div>
+        </section>
+        <section class="slide">
+            <span class="slide-number">שקף 2</span>
+            <h2>הבעיה העסקית</h2>
+            <div class="body columns">
+                <div class="panel bad"><h3>Shadow AI</h3><p>עובדים מעבירים קוד, מסמכים ופרטי לקוחות לכלים חיצוניים בלי בדיקה מסודרת.</p></div>
+                <div class="panel warn"><h3>בדיקה ידנית איטית</h3><p>צוותי אבטחה, משפט וציות בודקים תנאי שימוש, חוזים והרשאות עבור כל בקשה.</p></div>
+                <div class="panel bad"><h3>החלטה שגויה יקרה</h3><p>טעות עלולה לגרום לדליפת מידע, שימוש בנתונים לאימון או הפרת חובת פרטיות.</p></div>
+                <div class="panel good"><h3>המטרה</h3><p>לאשר במהירות מקרים ברורים, לחסום הפרות ולהעביר מקרים לא ודאיים לבדיקה אנושית.</p></div>
+            </div>
+        </section>
+        <section class="slide">
+            <span class="slide-number">שקף 3</span>
+            <h2>למה LLM לבדו אינו מספיק</h2>
+            <div class="body columns">
+                <div><ul>
+                    <li>מודל עלול להמציא עובדה שחסרה במסמך.</li>
+                    <li>מסמך הספק עצמו עלול להכיל Prompt Injection.</li>
+                    <li>קשה להסביר לרגולטור מדוע המודל חשב שהבקשה בטוחה.</li>
+                </ul></div>
+                <div class="panel good"><h3>גבול הסמכות</h3><p>רכיב החילוץ הופך טקסט לטענות, ערכים, רמת ודאות וראיות. הוא אינו רשאי לאשר בקשה או לבחור את המצב הבא.</p></div>
+            </div>
+            <div class="statement">עובדה שלא נמצאה במסמך מסומנת כלא ידועה. המערכת אינה משלימה אותה בערך נוח.</div>
+        </section>
+        <section class="slide">
+            <span class="slide-number">שקף 4</span>
+            <h2>הארכיטקטורה בשלוש שכבות</h2>
+            <div class="body layers">
+                <div class="layer"><div class="num">01</div><h3>הבנת הבקשה</h3><p>אימות זהות, קליטת תנאי הספק וחילוץ טענות עם רמת ודאות.</p></div>
+                <div class="layer"><div class="num">02</div><h3>החלטה מבוקרת</h3><p>כללי מדיניות, עקביות אילוצים, הרשאות ושרשרת תתי־ספקים.</p></div>
+                <div class="layer"><div class="num">03</div><h3>ממשל ובקרה</h3><p>מכונת מצבים, אדם בלולאה, הפרדת סמכויות ויומן חתום.</p></div>
+            </div>
+            <p class="fine">שלוש השכבות הן תחומי אחריות בתוך שירות אחד, ולא שירותים אוטונומיים נפרדים.</p>
+        </section>
+        <section class="slide">
+            <span class="slide-number">שקף 5</span>
+            <h2>זרימת ההחלטה</h2>
+            <div class="body">
+                <div class="flow"><span>Request</span><b>›</b><span>Extract facts</span><b>›</b><span>Policy checks</span><b>›</b><span>Route decision</span><b>›</b><span>Audit</span></div>
+                <div class="columns">
+                    <div class="panel"><h3>EFSM</h3><p>18 מצבים ו־31 מעברים. כל שינוי מצב עובר דרך טבלה אחת. מעבר שלא מופיע בטבלה נדחה.</p></div>
+                    <div class="panel"><h3>מגן טמפורלי</h3><p>לפני אישור, המערכת בודקת שההיסטוריה כוללת את בדיקות החובה ושלא דילגו על שלב.</p></div>
+                </div>
+                <div class="statement">ברירת המחדל באי־ודאות היא המתנה לאדם, לא אישור אוטומטי.</div>
+            </div>
+        </section>
+        <section class="slide">
+            <span class="slide-number">שקף 6</span>
+            <h2>ארבעת תרחישי ההדגמה</h2>
+            <div class="body">
+                <table>
+                    <thead><tr><th>תרחיש</th><th>מה המערכת מזהה</th><th>תוצאה</th></tr></thead>
+                    <tbody>
+                        <tr><td>מודל מקומי לקוד</td><td>עיבוד מקומי, ללא שמירה וללא אימון</td><td class="status-ok">אישור אוטומטי</td></tr>
+                        <tr><td>SaaS שמאמן על PII</td><td>הפרה ישירה של כלל מדיניות</td><td class="status-no">חסימה</td></tr>
+                        <tr><td>הוראה חשודה בתוך ToS</td><td>Prompt Injection מוריד את הוודאות</td><td class="status-wait">בדיקה אנושית</td></tr>
+                        <tr><td>בקשת PII עם DPA</td><td>הבדיקות עברו, אך נדרשת חתימת DPO</td><td class="status-wait">הפרדת סמכויות</td></tr>
+                    </tbody>
+                </table>
+                <p style="margin-top:1.2rem">לאחר ארבעת התרחישים: ניסיון עקיפה אחד מדגים את ההגנה הכפולה של טבלת המעברים והמגן הטמפורלי.</p>
+            </div>
+        </section>
+        <section class="slide">
+            <span class="slide-number">שקף 7</span>
+            <h2>הסבר, בקרה ובדיקות</h2>
+            <div class="body columns">
+                <div><ul>
+                    <li>כל החלטה כוללת את העובדות, השערים שעברו והסיבה לחסימה.</li>
+                    <li>Z3 מחזיר UNSAT Core והצעת תיקון כאשר האילוצים סותרים.</li>
+                    <li>יומן hash chain עם HMAC חושף שינוי ללא מפתח השרת.</li>
+                </ul></div>
+                <div class="panel good"><h3>51 בדיקות אוטומטיות</h3><ul>
+                    <li>כיסוי כל 31 המעברים</li>
+                    <li>מעברים לא חוקיים וניסיון עקיפה</li>
+                    <li>HITL והפרדת סמכויות</li>
+                    <li>בקשות מקבילות ושלמות היומן</li>
+                </ul></div>
+            </div>
+        </section>
+        <section class="slide">
+            <span class="slide-number">שקף 8</span>
+            <h2>גבולות אב־הטיפוס</h2>
+            <div class="body">
+                <table>
+                    <thead><tr><th>יכולת</th><th>אב־הטיפוס</th><th>מערכת ייצור</th></tr></thead>
+                    <tbody>
+                        <tr><td>חילוץ מסמך</td><td>כללים דטרמיניסטיים</td><td>LLM פרטי עם פלט מובנה</td></tr>
+                        <tr><td>מדיניות</td><td>סמנטיקה ממומשת ב־Python</td><td>OPA, SWI-Prolog ו־Soufflé</td></tr>
+                        <tr><td>הקשר רגולטורי</td><td>בחירת הפניות קבועה</td><td>RAG עם מסמכים מנוהלי גרסאות</td></tr>
+                        <tr><td>זהות ותורים</td><td>מאגרי דמו וזיכרון התהליך</td><td>SSO, CLM ומסד נתונים</td></tr>
+                        <tr><td>יומן</td><td>קובץ חתום שמאפשר לזהות שינוי</td><td>WORM, KMS ועוגן חיצוני</td></tr>
+                    </tbody>
+                </table>
+                <p class="fine" style="margin-top:1rem">הטבלה מפרידה בין מה שהפרויקט מוכיח בפועל לבין ארכיטקטורת היעד.</p>
+            </div>
+        </section>
+        <section class="slide">
+            <span class="slide-number">שקף 9</span>
+            <h2>תשובה לשאלת הליבה</h2>
+            <div class="body">
+                <div class="statement" style="font-size:1.45rem">המודל אינו בוחר את המצב הבא. טבלת המעברים מגבילה את רצף הפעולות, המגן הטמפורלי בודק את ההיסטוריה לפני אישור, מידע חסר עובר לאדם, והאדם כפוף להפרדת סמכויות.</div>
+                <div class="columns" style="margin-top:2rem">
+                    <div class="panel good"><h3>התוצאה</h3><p>אישור מהיר במקרים ברורים והסבר מפורש בכל החלטה.</p></div>
+                    <div class="panel"><h3>העיקרון</h3><p>AI מסייע בהבנת הטקסט. ממשל מפורש שומר על גבולות הסמכות.</p></div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <button id="prev" type="button">הקודם</button>
+        <span class="fine">ניווט באמצעות מקשי החצים</span>
+        <button id="next" type="button">הבא</button>
+    </footer>
+    <script>
+        const slides = [...document.querySelectorAll(".slide")];
+        let current = 0;
+        function show(index) {
+            current = Math.max(0, Math.min(slides.length - 1, index));
+            slides.forEach((slide, i) => slide.classList.toggle("active", i === current));
+            document.getElementById("counter").textContent = `${current + 1} / ${slides.length}`;
+            document.getElementById("prev").disabled = current === 0;
+            document.getElementById("next").disabled = current === slides.length - 1;
+        }
+        document.getElementById("prev").addEventListener("click", () => show(current - 1));
+        document.getElementById("next").addEventListener("click", () => show(current + 1));
+        document.addEventListener("keydown", event => {
+            if (["ArrowLeft", "PageDown", " "].includes(event.key)) show(current + 1);
+            if (["ArrowRight", "PageUp"].includes(event.key)) show(current - 1);
+            if (event.key === "Home") show(0);
+            if (event.key === "End") show(slides.length - 1);
+        });
+        show(0);
+    </script>
+</body>
+</html>

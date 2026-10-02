@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Compliance Workflow | פורטל ארגוני פנימי</title>
+    <link rel="stylesheet" href="styles.css?v=3">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-container">
+            <div class="logo-area">
+                <span class="badge-server">שרת ארגוני פנימי (On-Premises / VPC)</span>
+                <h1>🛡️ AI Compliance & Policy Workflow</h1>
+                <p class="subtitle">אישור כלי AI בארגון: מכונת מצבים מבוססת טבלה, מנועי לוגיקה פורמליים ואדם בלולאה</p>
+            </div>
+            <div class="header-actions">
+                <a href="#diagram-section" class="btn-transitions">
+                    <span class="btn-icon">🗺️</span><span>מפת המצבים</span>
+                </a>
+                <a href="#transitions-section" class="btn-transitions">
+                    <span class="btn-icon">📑</span><span>טבלת מעברים</span>
+                </a>
+                <a href="/business-presentation" class="btn-presentation" target="_blank" rel="noopener">
+                    <span class="btn-icon">📊</span><span>מצגת עסקית</span>
+                </a>
+                <a href="/presentation" class="btn-transitions" target="_blank" rel="noopener">
+                    <span class="btn-icon">🎓</span><span>מצגת טכנית</span>
+                </a>
+                <div class="status-pill" id="server-status">
+                    <span class="dot"></span> <span id="server-status-text">בודק שרת…</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <!-- Three architectural layers inside one service. -->
+        <section class="card agents-command-section">
+            <div class="card-header">
+                <h2>שלוש שכבות הארכיטקטורה</h2>
+                <span class="badge-role">כולן פועלות בתוך שירות אחד</span>
+            </div>
+            <div class="agents-grid">
+                <div class="agent-card" id="card-layer-1">
+                    <div>
+                        <div class="agent-header"><span class="agent-icon">📄</span><div><span class="agent-id-tag agent-2-tag">שכבה 1</span><div class="agent-name">הבנת הבקשה</div></div></div>
+                        <div class="agent-role">קליטה, אימות זהות, הקשר וחילוץ טענות מה-ToS</div>
+                        <div class="agent-stack-tags"><span class="stack-tag">Claims</span><span class="stack-tag">C_score</span><span class="stack-tag">Injection Guard</span></div>
+                    </div>
+                    <div><div class="agent-telemetry" id="telemetry-layer-1">ממתינה לבקשה</div><div class="agent-footer"><span class="agent-states-list">S₁–S₆</span><span class="agent-status-badge" id="status-layer-1">Idle</span></div></div>
+                </div>
+                <div class="agent-card" id="card-layer-2">
+                    <div>
+                        <div class="agent-header"><span class="agent-icon">⚖️</span><div><span class="agent-id-tag agent-4-tag">שכבה 2</span><div class="agent-name">החלטה מבוקרת</div></div></div>
+                        <div class="agent-role">בדיקת מדיניות, עקביות, הרשאות ושרשרת ספקים</div>
+                        <div class="agent-stack-tags"><span class="stack-tag">OPA</span><span class="stack-tag">Z3</span><span class="stack-tag">Prolog</span><span class="stack-tag">Datalog</span><span class="stack-tag">LTL</span></div>
+                    </div>
+                    <div><div class="agent-telemetry" id="telemetry-layer-2">ממתינה לבקשה</div><div class="agent-footer"><span class="agent-states-list">S₄ S₇–S₁₀</span><span class="agent-status-badge" id="status-layer-2">Idle</span></div></div>
+                </div>
+                <div class="agent-card" id="card-layer-3">
+                    <div>
+                        <div class="agent-header"><span class="agent-icon">🛡️</span><div><span class="agent-id-tag agent-6-tag">שכבה 3</span><div class="agent-name">ממשל ובקרה</div></div></div>
+                        <div class="agent-role">תזמור, התאוששות, אדם בלולאה, הפרדת סמכויות ויומן</div>
+                        <div class="agent-stack-tags"><span class="stack-tag">EFSM</span><span class="stack-tag">HITL + SoD</span><span class="stack-tag">HMAC Ledger</span></div>
+                    </div>
+                    <div><div class="agent-telemetry" id="telemetry-layer-3">ממתינה לבקשה</div><div class="agent-footer"><span class="agent-states-list">Routing + Outcomes</span><span class="agent-status-badge" id="status-layer-3">Idle</span></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Demo presets -->
+        <section class="card presets-card">
+            <div class="presets-header">
+                <div class="presets-badge"><span class="badge-icon">⚡</span><span>Demo</span></div>
+                <h3>תרחישי ההדגמה המרכזיים</h3>
+                <p class="muted">בחרו תרחיש, שלחו את הבקשה ועקבו אחר ההחלטה והמסלול.</p>
+            </div>
+            <div class="presets-grid" id="presets-grid"></div>
+        </section>
+
+        <div class="workspace-grid">
+            <!-- Intake form -->
+            <section class="card form-card">
+                <div class="card-header">
+                    <h2>📝 טופס בקשת שימוש בכלי AI</h2>
+                    <span class="badge-role">טענות העובד מאומתות מול מאגרי הארגון</span>
+                </div>
+                <form id="compliance-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="userName">שם העובד המבקש:</label>
+                            <input type="text" id="userName" required placeholder="למשל: דן מזרחי" maxlength="120">
+                        </div>
+                        <div class="form-group">
+                            <label for="userRole">תפקיד מוצהר:</label>
+                            <select id="userRole" required>
+                                <option value="developer">מפתח תוכנה (Developer)</option>
+                                <option value="product_manager">מנהל מוצר (Product Manager)</option>
+                                <option value="data_scientist">חוקר נתונים (Data Scientist)</option>
+                                <option value="marketing">איש שיווק (Marketing)</option>
+                                <option value="ciso">קצין אבטחת מידע (CISO)</option>
+                                <option value="dpo">ממונה הגנת פרטיות (DPO)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <p class="form-hint">התפקיד נבדק מול ספריית העובדים. אם הוא לא תואם, קובע התפקיד מהספרייה והבקשה נחסמת כניסיון התחזות.</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="department">מחלקה:</label>
+                            <input type="text" id="department" required placeholder="למשל: R&D" maxlength="120">
+                        </div>
+                        <div class="form-group">
+                            <label for="toolName">שם הכלי או המודל:</label>
+                            <input type="text" id="toolName" required placeholder="למשל: Secure-Local-Code-LLM" maxlength="200">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="deploymentType">סוג פריסה:</label>
+                            <select id="deploymentType" required>
+                                <option value="ON_PREMISES">התקנה מקומית (On-Premises)</option>
+                                <option value="DEDICATED_CLOUD">ענן ייעודי לארגון (Dedicated Cloud)</option>
+                                <option value="PUBLIC_SAAS">ענן ציבורי (Public SaaS)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="dataSensitivity">סיווג המידע שיוזן לכלי:</label>
+                            <select id="dataSensitivity" required>
+                                <option value="PUBLIC">ציבורי (Public)</option>
+                                <option value="INTERNAL">פנימי (Internal)</option>
+                                <option value="CONFIDENTIAL">סודי / קוד מקור (Confidential)</option>
+                                <option value="RESTRICTED_PII">פרטי לקוחות (Restricted PII)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="hasSignedDpa">
+                            <span class="checkmark"></span>
+                            קיים DPA חתום מול הספק (נבדק מול מאגר החוזים)
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="intendedUse">מטרת השימוש העסקית:</label>
+                        <textarea id="intendedUse" rows="2" required maxlength="2000" placeholder="אילו נתונים יוזנו ולאיזו מטרה…"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tosText">תנאי השימוש של הספק (ToS):</label>
+                        <textarea id="tosText" rows="3" placeholder="הדבק סעיפים מתנאי השימוש. בלי ToS המערכת לא מניחה כלום: היא מחפשת במאגר הספקים, ואם הספק לא שם, הבקשה עוברת לקצין ציות (Fail-Closed)."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-submit" id="submit-btn"><span>🚀 שלח בקשה לבדיקה</span></button>
+                </form>
+            </section>
+
+            <!-- Decision -->
+            <section class="card results-card" id="results-card">
+                <div class="card-header">
+                    <h2>⚖️ החלטת המערכת</h2>
+                    <span id="current-state-badge" class="badge-state">S0: Idle</span>
+                </div>
+
+                <div id="empty-state" class="empty-state">
+                    <div class="empty-icon">🔍</div>
+                    <p>בחר תרחיש או מלא את הטופס כדי להריץ את הבקשה במכונת המצבים.</p>
+                </div>
+
+                <div id="result-body" hidden>
+                    <div id="decision-banner" class="decision-banner">
+                        <div class="decision-icon" id="decision-icon"></div>
+                        <div class="decision-content">
+                            <h3 id="decision-title"></h3>
+                            <p id="decision-explanation" dir="auto"></p>
+                        </div>
+                    </div>
+
+                    <!-- Human-in-the-loop panels -->
+                    <div id="officer-panel" class="hitl-panel" hidden>
+                        <h4>🧑‍⚖️ החלטת קצין ציות (S₁₂)</h4>
+                        <p class="hitl-note">הרשאות הקצין נבדקות ב-Prolog: רק DPO/CISO, לא המבקש עצמו, ובקשת PII רק DPO. אישור עובר גם את מגן ה-LTL.</p>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="officerName">שם הקצין:</label>
+                                <input type="text" id="officerName" list="officer-list" placeholder="רונית כהן">
+                                <datalist id="officer-list">
+                                    <option value="רונית כהן">DPO</option>
+                                    <option value="עמית שלו">CISO</option>
+                                </datalist>
+                            </div>
+                            <div class="form-group">
+                                <label for="officerNotes">הערות / תנאים:</label>
+                                <input type="text" id="officerNotes" maxlength="2000">
+                            </div>
+                        </div>
+                        <div class="hitl-actions">
+                            <button type="button" class="btn hitl-btn hitl-approve" data-action="APPROVE">✅ אשר (T22)</button>
+                            <button type="button" class="btn hitl-btn hitl-reject" data-action="REJECT">❌ דחה (T23)</button>
+                            <button type="button" class="btn hitl-btn hitl-info" data-action="REQUEST_INFO">❓ בקש מידע (T24)</button>
+                        </div>
+                        <div id="officer-error" class="hitl-error" hidden></div>
+                    </div>
+
+                    <div id="clarify-panel" class="hitl-panel" hidden>
+                        <h4>✍️ השלמת מידע מהעובד (S₁₁)</h4>
+                        <div class="form-group">
+                            <label for="clarifyUse">מטרת שימוש מעודכנת:</label>
+                            <textarea id="clarifyUse" rows="2" maxlength="2000"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="clarifyTos">תנאי שימוש (אם ביקשו):</label>
+                            <textarea id="clarifyTos" rows="2"></textarea>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-container"><input type="checkbox" id="clarifyDpa"><span class="checkmark"></span> קיים DPA חתום</label>
+                        </div>
+                        <div class="hitl-actions">
+                            <button type="button" class="btn hitl-btn hitl-info" id="clarify-submit">📨 שלח והרץ מחדש (T21)</button>
+                        </div>
+                        <div id="clarify-error" class="hitl-error" hidden></div>
+                    </div>
+
+                    <div class="engines-section">
+                        <h4>🛡️ שערי הבקרה (מחושבים בשרת לפי מה שרץ בפועל)</h4>
+                        <div class="engines-grid gates-grid" id="gates-grid"></div>
+                    </div>
+
+                    <div class="facts-grid">
+                        <div class="detail-box">
+                            <h5>🧾 טענות שחולצו מה-ToS (C_score = הערך הנמוך ביותר)</h5>
+                            <div id="claims-box"></div>
+                        </div>
+                        <div class="detail-box">
+                            <h5>🪪 זהות ורישומים</h5>
+                            <div id="identity-box"></div>
+                        </div>
+                    </div>
+
+                    <div id="remediation-box" class="detail-box remediation-box" hidden>
+                        <h5>🛠️ מה צריך להשתנות כדי לאשר (Z3 counter-model)</h5>
+                        <ul id="remediation-list"></ul>
+                    </div>
+
+                    <div class="details-section">
+                        <div class="detail-box blocking-box" id="blocking-box" hidden>
+                            <h5>⛔ סיבות חסימה וממצאים</h5>
+                            <ul id="blocking-list"></ul>
+                        </div>
+                        <div class="detail-box satisfied-box">
+                            <h5>✅ בדיקות שעברו</h5>
+                            <ul id="satisfied-list"></ul>
+                        </div>
+                    </div>
+
+                    <div class="detail-box">
+                        <h5>⏳ אינווריאנטי LTL על העקבה בפועל</h5>
+                        <div id="ltl-box"></div>
+                    </div>
+
+                    <div class="timeline-section">
+                        <h4>📜 עקבת המעברים (כל שורה = שורה בטבלת המעברים)</h4>
+                        <div class="timeline" id="timeline"></div>
+                    </div>
+
+                    <div class="audit-section">
+                        <div class="audit-badge">
+                            <span>🔒 בלוק ביקורת (SHA-256 של העקבה עד הכתיבה + HMAC):</span>
+                            <code id="audit-hash"></code>
+                        </div>
+                    </div>
+
+                    <details class="raw-json-details">
+                        <summary class="raw-json-summary">
+                            <span>▶ JSON גולמי</span>
+                            <button type="button" class="btn btn-copy-json" id="copy-json">📋 העתק</button>
+                        </summary>
+                        <div class="raw-json-container"><pre><code id="raw-json-code"></code></pre></div>
+                    </details>
+                </div>
+            </section>
+        </div>
+
+        <!-- State diagram -->
+        <section class="card" id="diagram-section">
+            <div class="card-header">
+                <h2>🗺️ מפת מכונת המצבים: המסלול של הבקשה האחרונה</h2>
+                <div class="diagram-controls">
+                    <button type="button" class="btn filter-btn" id="replay-btn" disabled>▶ הפעל מחדש</button>
+                    <button type="button" class="btn filter-btn" id="showall-btn" disabled>⏭ הצג הכל</button>
+                </div>
+            </div>
+            <p class="section-desc">כל 18 המצבים ו-31 המעברים נטענים מהשרת. מעברים שהבקשה עברה מודגשים לפי הסדר, והשאר אפורים.</p>
+            <div class="diagram-caption" id="diagram-caption">ממתין לבקשה…</div>
+            <div class="diagram-scroll"><svg id="state-diagram" role="img" aria-label="State machine diagram"></svg></div>
+            <div class="diagram-legend">
+                <span><i class="lg lg-path"></i> מסלול הבקשה</span>
+                <span><i class="lg lg-wait"></i> מצב המתנה לאדם</span>
+                <span><i class="lg lg-ok"></i> אישור</span>
+                <span><i class="lg lg-bad"></i> דחייה</span>
+                <span><i class="lg lg-rec"></i> התאוששות</span>
+            </div>
+        </section>
+
+        <!-- Bypass demo -->
+        <section class="card" id="bypass-section">
+            <div class="card-header">
+                <h2>🧨 ניסיון עקיפה: האם אפשר לדלג ישר לאישור?</h2>
+                <button type="button" class="btn filter-btn" id="bypass-btn">הרץ ניסיון עקיפה</button>
+            </div>
+            <p class="section-desc">מדמה בקר תזמור פגום שמנסה לאשר בקשה בלי לעבור את השערים. שתי שכבות עוצרות אותו: טבלת המעברים, ומגן ה-LTL שבודק כל כניסה ל-S₁₄.</p>
+            <div id="bypass-result"></div>
+        </section>
+
+        <!-- Pending queue -->
+        <section class="card" id="pending-section">
+            <div class="card-header">
+                <h2>📥 תור ממתינים (S₁₁ / S₁₂)</h2>
+                <button type="button" class="btn filter-btn" id="pending-refresh">רענן</button>
+            </div>
+            <div id="pending-list" class="pending-list"></div>
+        </section>
+
+        <!-- Transitions table (from API) -->
+        <section class="card transitions-card" id="transitions-section">
+            <div class="card-header">
+                <h2>📑 טבלת המעברים</h2>
+                <span class="badge-role" id="transitions-count"></span>
+            </div>
+            <p class="section-desc">הטבלה נבנית מ-<code>GET /api/state-machine</code>, אותו מקור שהמכונה אוכפת בזמן ריצה. אין עותק ידני שיכול להתיישן.</p>
+            <div class="table-filters" id="table-filters"></div>
+            <div class="table-container">
+                <table class="transitions-table" id="transitions-table">
+                    <thead>
+                        <tr><th>#</th><th>מעבר</th><th>שכבה</th><th>אירוע</th><th>Guard</th><th>פעולה</th><th>דוגמה</th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <p>AI Compliance & Policy Workflow · פרויקט גמר, אוניברסיטת בר-אילן 2026 · אב-טיפוס: המנועים הפורמליים מבוצעים בשרת, רכיבי הייצור מסומנים (prod)</p>
+    </footer>
+
+    <script src="app.js?v=5"></script>
+</body>
+</html>

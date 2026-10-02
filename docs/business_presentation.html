@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Compliance Workflow — מצגת עסקית</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #080d17; --surface: #111827; --text: #f8fafc; --muted: #a9b4c7;
+            --cyan: #22d3ee; --blue: #60a5fa; --green: #34d399; --amber: #fbbf24;
+            --red: #fb7185; --line: rgba(255,255,255,.14);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { min-height: 100vh; overflow: hidden; display: flex; flex-direction: column; background: var(--bg); color: var(--text); font-family: "Heebo", sans-serif; }
+        header, footer { min-height: 62px; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; background: rgba(17,24,39,.94); border-color: var(--line); }
+        header { border-bottom: 1px solid var(--line); }
+        footer { border-top: 1px solid var(--line); }
+        .return, button { border: 1px solid var(--line); border-radius: 8px; background: rgba(255,255,255,.06); color: var(--text); padding: .52rem 1rem; font: inherit; font-weight: 600; text-decoration: none; cursor: pointer; }
+        button:hover, .return:hover { background: rgba(255,255,255,.12); }
+        button:disabled { opacity: .35; cursor: default; }
+        .counter { color: var(--muted); direction: ltr; }
+        main { flex: 1; min-height: 0; display: grid; place-items: center; padding: 1.35rem; }
+        .slide { display: none; width: min(1120px, 100%); height: min(610px, calc(100vh - 166px)); overflow: auto; padding: 2.8rem 3.2rem; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: 0 24px 60px rgba(0,0,0,.42); }
+        .slide.active { display: flex; flex-direction: column; }
+        .eyebrow { color: var(--cyan); font-size: .92rem; font-weight: 700; letter-spacing: .02em; }
+        h1 { margin-top: 5rem; font-size: 3.55rem; line-height: 1.08; max-width: 870px; }
+        h2 { font-size: 2.25rem; line-height: 1.18; padding-bottom: .9rem; border-bottom: 2px solid var(--line); }
+        h3 { font-size: 1.22rem; margin-bottom: .35rem; }
+        .subtitle { margin-top: 1.2rem; font-size: 1.42rem; color: var(--muted); max-width: 870px; }
+        .body { flex: 1; padding-top: 1.7rem; font-size: 1.17rem; line-height: 1.55; }
+        .hero-line { margin-top: 2rem; padding-right: 1.35rem; border-right: 5px solid var(--cyan); font-size: 1.42rem; max-width: 920px; }
+        .accent { color: var(--cyan); }
+        .muted { color: var(--muted); }
+        .big { font-size: 1.55rem; line-height: 1.45; }
+        .split { display: grid; grid-template-columns: 1.05fr .95fr; gap: 3rem; align-items: start; }
+        .rule-list { list-style: none; padding: 0; }
+        .rule-list li { padding: .75rem 0; border-bottom: 1px solid var(--line); }
+        .rule-list strong { display: block; color: var(--cyan); font-size: 1.05rem; }
+        .problem { padding-right: 1.2rem; border-right: 4px solid var(--red); }
+        .solution { padding-right: 1.2rem; border-right: 4px solid var(--green); }
+        .journey { direction: ltr; display: grid; grid-template-columns: repeat(5, 1fr); gap: .7rem; align-items: stretch; margin-top: 1.1rem; }
+        .step { direction: rtl; padding: 1rem .8rem; border-top: 4px solid var(--blue); background: rgba(255,255,255,.045); min-height: 145px; }
+        .step:nth-child(2) { border-color: var(--cyan); }
+        .step:nth-child(3) { border-color: var(--amber); }
+        .step:nth-child(4) { border-color: var(--green); }
+        .step:nth-child(5) { border-color: #a78bfa; }
+        .step b { display: block; color: var(--muted); font-size: .9rem; margin-bottom: .45rem; }
+        .value-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.7rem; margin-top: .7rem; }
+        .value { padding-top: 1rem; border-top: 4px solid var(--cyan); }
+        .value:nth-child(2) { border-color: var(--green); }
+        .value:nth-child(3) { border-color: var(--amber); }
+        .value p { color: var(--muted); margin-top: .35rem; }
+        .layers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.3rem; margin-top: 1rem; }
+        .layer { padding: 1.2rem 1.25rem; border-right: 5px solid var(--cyan); background: rgba(255,255,255,.04); }
+        .layer:nth-child(2) { border-color: var(--blue); }
+        .layer:nth-child(3) { border-color: var(--green); }
+        table { width: 100%; border-collapse: collapse; font-size: 1.02rem; }
+        th, td { text-align: right; padding: .72rem .75rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+        th { color: var(--cyan); }
+        .phase { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.4rem; margin-top: .7rem; }
+        .phase > div { padding: 1.1rem; border-top: 4px solid var(--blue); background: rgba(255,255,255,.04); }
+        .phase > div:nth-child(2) { border-color: var(--cyan); }
+        .phase > div:nth-child(3) { border-color: var(--green); }
+        .ask { margin-top: 1.1rem; padding: 1.45rem 1.6rem; border: 1px solid rgba(52,211,153,.5); background: rgba(52,211,153,.08); font-size: 1.35rem; }
+        .note { margin-top: 1rem; font-size: .93rem; color: var(--muted); }
+        @media (max-width: 850px) {
+            .slide { padding: 1.5rem; }
+            .split, .value-row, .layers, .phase, .journey { grid-template-columns: 1fr; }
+            h1 { margin-top: 2rem; font-size: 2.35rem; }
+            h2 { font-size: 1.7rem; }
+            .body { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a class="return" href="/">חזרה לפורטל</a>
+        <span class="counter" id="counter">1 / 9</span>
+    </header>
+    <main>
+        <section class="slide active">
+            <span class="eyebrow">הצעה עסקית • ממשל AI ארגוני</span>
+            <h1>מאפשרים לעובדים להשתמש ב־AI<br><span class="accent">בלי לאבד שליטה</span></h1>
+            <p class="subtitle">תהליך אחיד, מהיר ומתועד לאישור כלי AI ושירותי SaaS בארגון</p>
+            <div class="hero-line">מקרים ברורים מקבלים החלטה מהירה. סיכון ואי־ודאות מגיעים לאדם הנכון.</div>
+        </section>
+
+        <section class="slide">
+            <span class="eyebrow">01 • האתגר</span>
+            <h2>הביקוש ל־AI גדל מהר יותר מתהליך האישור</h2>
+            <div class="body split">
+                <div class="problem">
+                    <p class="big">עובדים רוצים להתקדם עכשיו, אבל צוותי אבטחה, פרטיות ומשפט נדרשים לבדוק ידנית כל כלי וכל חוזה.</p>
+                </div>
+                <ul class="rule-list">
+                    <li><strong>זמן המתנה</strong>בקשות מצטברות ותלויות במספר גורמים.</li>
+                    <li><strong>Shadow AI</strong>חלק מהעובדים עוקפים תהליך שאינו זמין או מהיר מספיק.</li>
+                    <li><strong>חוסר אחידות</strong>אותו סיכון עלול לקבל תשובה שונה מאנשים שונים.</li>
+                    <li><strong>קושי בביקורת</strong>לא תמיד ברור מי אישר, על סמך מה ובאיזו גרסת מדיניות.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="slide">
+            <span class="eyebrow">02 • ההצעה</span>
+            <h2>שער כניסה אחד לכל בקשת שימוש ב־AI</h2>
+            <div class="body split">
+                <div class="solution">
+                    <p class="big">המערכת אוספת את פרטי השימוש, בודקת את תנאי הספק מול מדיניות הארגון ומנתבת את הבקשה לתוצאה ברורה.</p>
+                </div>
+                <ul class="rule-list">
+                    <li><strong>אישור</strong>כאשר העובדות והמדיניות מאפשרות זאת.</li>
+                    <li><strong>חסימה</strong>כאשר קיימת הפרה מפורשת.</li>
+                    <li><strong>השלמת מידע</strong>כאשר חסרה עובדה חיונית.</li>
+                    <li><strong>בדיקה אנושית</strong>כאשר יש אי־ודאות, חריגה או דרישת סמכות.</li>
+                </ul>
+            </div>
+            <p class="note">המערכת תומכת בהחלטה; היא אינה מחליפה בעל תפקיד כאשר נדרש שיקול דעת.</p>
+        </section>
+
+        <section class="slide">
+            <span class="eyebrow">03 • חוויית המשתמש</span>
+            <h2>מבקשה להחלטה — תהליך פשוט ושקוף</h2>
+            <div class="body">
+                <div class="journey">
+                    <div class="step"><b>1</b><h3>הגשת בקשה</h3><p>מי ישתמש, באיזה כלי ולאיזו מטרה.</p></div>
+                    <div class="step"><b>2</b><h3>איסוף עובדות</h3><p>סוגי מידע, שמירה, אימון ותתי־ספקים.</p></div>
+                    <div class="step"><b>3</b><h3>בדיקת מדיניות</h3><p>השוואה עקבית לכללי הארגון.</p></div>
+                    <div class="step"><b>4</b><h3>ניתוב החלטה</h3><p>אישור, חסימה או העברה לבעל תפקיד.</p></div>
+                    <div class="step"><b>5</b><h3>תיעוד</h3><p>נימוק, עקבות החלטה והיסטוריה לביקורת.</p></div>
+                </div>
+                <div class="hero-line">העובד רואה מה חסר ומה השלב הבא; צוותי הבקרה מקבלים רק את המקרים שדורשים אותם.</div>
+            </div>
+        </section>
+
+        <section class="slide">
+            <span class="eyebrow">04 • הערך העסקי</span>
+            <h2>מה הארגון מרוויח</h2>
+            <div class="body">
+                <div class="value-row">
+                    <div class="value"><h3>מהירות</h3><p>קיצור התלות בבדיקה ידנית עבור בקשות ברורות וחזרתיות.</p></div>
+                    <div class="value"><h3>שליטה</h3><p>החלטות עקביות לפי מדיניות, עם עצירה מובנית כשחסר מידע.</p></div>
+                    <div class="value"><h3>אמון</h3><p>נימוק ותיעוד לכל החלטה, לצורכי הנהלה, ביקורת ורגולציה.</p></div>
+                </div>
+                <table style="margin-top:2rem">
+                    <thead><tr><th>בעל עניין</th><th>השיפור עבורו</th></tr></thead>
+                    <tbody>
+                        <tr><td>עובדים ויחידות עסקיות</td><td>תהליך צפוי ותשובה ברורה במקום שרשרת מיילים.</td></tr>
+                        <tr><td>אבטחה, פרטיות ומשפט</td><td>פחות טיפול שגרתי ויותר מיקוד בחריגים משמעותיים.</td></tr>
+                        <tr><td>הנהלה וביקורת</td><td>תמונה אחידה של בקשות, סיכונים, החלטות וזמני טיפול.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="slide">
+            <span class="eyebrow">05 • הארכיטקטורה העסקית</span>
+            <h2>שלוש שכבות אחריות — שירות אחד</h2>
+            <div class="body">
+                <div class="layers">
+                    <div class="layer"><h3>הבנת הבקשה</h3><p>קליטת המקרה והפקת עובדות מהמידע ומהמסמכים.</p></div>
+                    <div class="layer"><h3>החלטה מבוקרת</h3><p>בדיקת העובדות מול כללי מדיניות והרשאות.</p></div>
+                    <div class="layer"><h3>ממשל ובקרה</h3><p>ניהול התהליך, אישור אנושי, הפרדת סמכויות ותיעוד.</p></div>
+                </div>
+                <div class="hero-line">ה־AI מסייע להבין טקסט. כללים מפורשים וגורמי סמכות קובעים את ההחלטה.</div>
+                <p class="note">אב־הטיפוס מוכיח את זרימת ההחלטה. חיבור למערכות הארגון יבוצע במסגרת מעבר לייצור.</p>
+            </div>
+        </section>
+
+        <section class="slide">
+            <span class="eyebrow">06 • מדדי הצלחה</span>
+            <h2>איך נדע שהפתרון עובד</h2>
+            <div class="body">
+                <table>
+                    <thead><tr><th>מדד</th><th>מה הוא בוחן</th><th>כיוון רצוי</th></tr></thead>
+                    <tbody>
+                        <tr><td>זמן ממוצע להחלטה</td><td>מהירות התהליך מקצה לקצה</td><td>ירידה</td></tr>
+                        <tr><td>שיעור החלטות ללא טיפול ידני</td><td>כמה עבודה שגרתית נחסכת</td><td>עלייה מבוקרת</td></tr>
+                        <tr><td>שיעור בקשות שחזרו להשלמת מידע</td><td>איכות הטופס והמסמכים</td><td>ירידה</td></tr>
+                        <tr><td>עומס וזמן המתנה בתור האנושי</td><td>יעילות צוותי הבקרה</td><td>ירידה</td></tr>
+                        <tr><td>החלטות עם נימוק ותיעוד מלא</td><td>מוכנות לביקורת</td><td>כיסוי מלא</td></tr>
+                    </tbody>
+                </table>
+                <p class="note">ערכי היעד ייקבעו לאחר מדידת קו בסיס בפיילוט; אין במצגת הנחת חיסכון שלא נמדדה.</p>
+            </div>
+        </section>
+
+        <section class="slide">
+            <span class="eyebrow">07 • פיילוט</span>
+            <h2>מעבר מדורג שמקטין סיכון</h2>
+            <div class="body">
+                <div class="phase">
+                    <div><h3>1. הגדרת מסגרת</h3><p>בחירת יחידה עסקית, קטלוג בקשות, מדיניות מאושרת וקו בסיס למדדים.</p></div>
+                    <div><h3>2. פיילוט מבוקר</h3><p>הפעלה עם גורמי אבטחה, פרטיות ומשפט; החלטות רגישות נשארות אנושיות.</p></div>
+                    <div><h3>3. החלטת הרחבה</h3><p>בחינת דיוק, זמני טיפול, עומס תפעולי ומשוב משתמשים לפני פריסה רחבה.</p></div>
+                </div>
+                <div class="hero-line">הצלחה בפיילוט אינה רק “המערכת עובדת” — אלא שיפור מדיד בלי להגדיל סיכון.</div>
+            </div>
+        </section>
+
+        <section class="slide">
+            <span class="eyebrow">08 • החלטה מבוקשת</span>
+            <h2>הצעד הבא: פיילוט מוגבל ומדיד</h2>
+            <div class="body split">
+                <div>
+                    <h3 class="accent">מה נדרש מהארגון</h3>
+                    <ul class="rule-list">
+                        <li>יחידה עסקית אחת עם מקרי שימוש חוזרים</li>
+                        <li>נציגים מאבטחה, פרטיות, משפט והעסק</li>
+                        <li>מדיניות מאושרת ודוגמאות לבקשות עבר</li>
+                        <li>בעל חסות עסקי והגדרה משותפת למדדי הצלחה</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="accent">מה נבחן</h3>
+                    <ul class="rule-list">
+                        <li>איכות ויציבות ההחלטות</li>
+                        <li>קיצור זמני הטיפול</li>
+                        <li>הפחתת העומס הידני</li>
+                        <li>מוכנות לחיבורי SSO, מסמכים ויומן ארגוני</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="ask"><strong>הבקשה:</strong> לאשר פיילוט תחום, למדוד תוצאות, ורק לאחר מכן לקבל החלטה על הרחבה.</div>
+        </section>
+    </main>
+    <footer>
+        <button id="prev" type="button">הקודם</button>
+        <span class="muted">ניווט באמצעות מקשי החצים</span>
+        <button id="next" type="button">הבא</button>
+    </footer>
+    <script>
+        const slides = [...document.querySelectorAll(".slide")];
+        let current = 0;
+        function show(index) {
+            current = Math.max(0, Math.min(slides.length - 1, index));
+            slides.forEach((slide, i) => slide.classList.toggle("active", i === current));
+            document.getElementById("counter").textContent = `${current + 1} / ${slides.length}`;
+            document.getElementById("prev").disabled = current === 0;
+            document.getElementById("next").disabled = current === slides.length - 1;
+        }
+        document.getElementById("prev").addEventListener("click", () => show(current - 1));
+        document.getElementById("next").addEventListener("click", () => show(current + 1));
+        document.addEventListener("keydown", event => {
+            if (["ArrowLeft", "PageDown", " "].includes(event.key)) show(current + 1);
+            if (["ArrowRight", "PageUp"].includes(event.key)) show(current - 1);
+            if (event.key === "Home") show(0);
+            if (event.key === "End") show(slides.length - 1);
+        });
+        show(0);
+    </script>
+</body>
+</html>
