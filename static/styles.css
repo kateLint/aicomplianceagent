@@ -1081,21 +1081,16 @@ input[type="text"]:focus, select:focus, textarea:focus {
 }
 
 .agent-card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
     border-color: rgba(255, 255, 255, 0.25);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    box-shadow: none;
 }
 
 .agent-card.agent-active {
-    border-color: var(--accent-blue);
-    background: rgba(14, 165, 233, 0.12);
-    box-shadow: 0 0 20px rgba(56, 189, 248, 0.35);
-    animation: agentPulse 1.8s infinite;
-}
-
-@keyframes agentPulse {
-    0%, 100% { box-shadow: 0 0 15px rgba(56, 189, 248, 0.25); }
-    50% { box-shadow: 0 0 25px rgba(56, 189, 248, 0.55); border-color: #38bdf8; }
+    border-color: rgba(56, 189, 248, 0.45);
+    background: rgba(14, 165, 233, 0.08);
+    box-shadow: none;
+    animation: none;
 }
 
 .agent-header {
